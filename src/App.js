@@ -1,32 +1,27 @@
 
 import './App.css';
-import {useState, useEffect} from 'react'
+import {useState} from 'react';
+import useSWR from 'swr'
+
+
+const fetcher = (...args) => fetch(...args).then((res)=> res.json())
 
 function App() {
 
   const [gameTitle, SetGameTitle] =useState('')
   const [searchedGames, setSearchedGames]=useState([])
-  const [gameDeals, setGameDeals] = useState([])
+ 
+
+
+  const {data } = useSWR('https://www.cheapshark.com/api/1.0/deals?storeID=1&upperPrice=15&pageSize=3' , fetcher )
 
   const searchGame =()=>{
     fetch(`https://www.cheapshark.com/api/1.0/games?title=${gameTitle}&limit=3`)
     .then((res)=>res.json())
     .then((data)=>{
       setSearchedGames(data)
-      
-      
     })
   }
-
-  useEffect(()=>{
-    fetch(`https://www.cheapshark.com/api/1.0/deals?storeID=1&upperPrice=15&pageSize=3`)
-    .then((res)=>res.json())
-    .then((data)=>{
-      setGameDeals(data)
-      
-      
-    })
-  }, [])
 
   return (
     <div className="App">
@@ -49,7 +44,7 @@ function App() {
       <div className="dealsSection">
         <h1>Latest Deals</h1>
         <div className='games'>
-        {gameDeals.map((game, key)=>{
+        {data && data.map((game, key)=>{
           return <div className='game' id='deals' key={key}>
              <img src= {game.thumb} alt='game'/>
             <h3>{game.title}</h3>
