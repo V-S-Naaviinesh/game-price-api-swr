@@ -13,7 +13,7 @@ function App() {
     .then((res)=>res.json())
     .then((data)=>{
       setSearchedGames(data)
-      console.log(data)
+      
       
     })
   }
@@ -23,7 +23,7 @@ function App() {
     .then((res)=>res.json())
     .then((data)=>{
       setGameDeals(data)
-      console.log(data)
+      
       
     })
   }, [])
